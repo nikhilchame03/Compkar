@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --card: 221 39% 16%;
+  --card-foreground: 210 40% 98%;
+  --primary: 35 95% 58%;
+  --primary-foreground: 222 47% 11%;
+  --muted: 220 30% 24%;
+  --muted-foreground: 215 20% 72%;
+  --border: 220 30% 28%;
+  --radius: 0.8rem;
+}
+
+* {
+  @apply border-border;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  background-image:
+    radial-gradient(circle at 8% 10%, rgba(255, 183, 77, 0.17), transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(56, 189, 248, 0.18), transparent 30%),
+    linear-gradient(135deg, #0b1220 0%, #111a2b 45%, #0f172a 100%);
+  min-height: 100vh;
+}
+
+.grid-bg {
+  background-image: linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
