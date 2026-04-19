@@ -1,5 +1,11 @@
 # COMPKAR Monorepo
 
+## About the Project
+
+COMPKAR is a full-stack question practice platform designed to help users prepare for exams through daily practice questions. The platform provides an interactive interface to solve questions, track progress, and organize practice by topics and syllabus sections.
+
+## Project Structure
+
 Project is split into two folders:
 
 - `backend/`: Django backend, database models, admin, auth, question engine
