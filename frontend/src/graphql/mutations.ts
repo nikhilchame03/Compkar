@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+﻿import { gql } from "@apollo/client";
 
 export const CREATE_SUBJECT = gql`
   mutation CreateSubject($exam: String!, $name: String!) {
@@ -173,6 +173,42 @@ export const UPDATE_ATTEMPT = gql`
 export const DELETE_ATTEMPT = gql`
   mutation DeleteAttempt($id: Int!) {
     deleteAttempt(id: $id) {
+      ok
+    }
+  }
+`;
+
+export const CREATE_USER = gql`
+  mutation CreateUser($email: String!, $password: String!) {
+    createUser(email: $email, password: $password) {
+      user {
+        id
+        email
+        fullName
+        isActive
+        dateJoined
+      }
+    }
+  }
+`;
+
+export const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      user {
+        id
+        email
+        fullName
+        isActive
+        dateJoined
+      }
+    }
+  }
+`;
+
+export const LOGOUT = gql`
+  mutation Logout {
+    logout {
       ok
     }
   }

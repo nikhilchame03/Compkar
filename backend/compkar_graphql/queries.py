@@ -1,7 +1,16 @@
 import graphene
 from graphene_django import DjangoObjectType
+from django.contrib.auth import get_user_model
 
 from questions.models import Attempt, DailyQuestion, Question, Subject, Topic
+
+User = get_user_model()
+
+
+class UserType(DjangoObjectType):
+    class Meta:
+        model = User
+        fields = ("id", "email", "full_name", "is_active", "date_joined")  # Exclude sensitive fields like password, is_admin
 
 
 class SubjectType(DjangoObjectType):
