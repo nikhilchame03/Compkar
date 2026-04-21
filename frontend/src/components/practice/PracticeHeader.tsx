@@ -2,13 +2,11 @@ import { Badge } from "@/components/ui/badge";
 
 export function PracticeHeader() {
   return (
-    <header className="practice-header">
-      <div>
-        <p className="practice-brand">COMPKAR</p>
-        <h1 className="practice-title">JEE / NEET Practice Hub</h1>
-        <p className="practice-subtitle">Pick a topic, solve questions, and stay consistent with daily practice.</p>
-      </div>
-      <Badge className="bg-primary text-primary-foreground">Student View</Badge>
-    </header>
+    <nav className="practice-navbar">
+      <p className="practice-brand">COMPKAR</p>
+      <span className="badge-exam" style={{ padding: "4px 12px", borderRadius: "20px", border: "1px solid rgba(0,184,107,0.3)", background: "rgba(0,184,107,0.12)", color: "var(--lc-green)" }}>
+        Student View
+      </span>
+    </nav>
   );
 }

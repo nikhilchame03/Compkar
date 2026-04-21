@@ -14,21 +14,18 @@ type DailyQuestionsProps = {
 };
 
 export function DailyQuestions({ items }: DailyQuestionsProps) {
+  if (items.length === 0) return null;
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Daily Questions</CardTitle>
-        <CardDescription>Start from the daily set to build consistency.</CardDescription>
-      </CardHeader>
-      <CardContent className="daily-list">
-        {items.length === 0 ? <p className="empty-text">No daily question assigned yet.</p> : null}
+    <>
+      <p className="daily-section-header">Daily Questions</p>
+      <div className="daily-list">
         {items.map((item) => (
           <article className="daily-item" key={item.id}>
             <p className="daily-date">{item.date}</p>
             <p>{item.question.title}</p>
           </article>
         ))}
-      </CardContent>
-    </Card>
+      </div>
+    </>
   );
 }

@@ -6,7 +6,6 @@ import { DailyQuestions } from "@/components/practice/DailyQuestions";
 import { PracticeFilters } from "@/components/practice/PracticeFilters";
 import { PracticeHeader } from "@/components/practice/PracticeHeader";
 import { QuestionTable } from "@/components/practice/QuestionTable";
-import { TopicList } from "@/components/practice/TopicList";
 import { GET_DAILY_QUESTIONS, GET_QUESTIONS, GET_TOPICS } from "@/graphql/queries";
 import "@/styles/practice.css";
 
@@ -28,37 +27,15 @@ type Question = {
   title: string;
   statement: string;
   explanation?: string;
-  topic: {
-    name: string;
-  };
-  subject: {
-    name: string;
-  };
+  topic: { name: string };
+  subject: { name: string };
 };
 
 type DailyQuestion = {
   id: string;
   date: string;
-  question: {
-    id: string;
-    title: string;
-  };
+  question: { id: string; title: string };
 };
-
-const examTopicMatch = (examFilter: string, topic: Topic) => {
-  if (examFilter === "ALL") {
-    return true;
-  }
-
-  if (examFilter === "BOTH") {
-    return topic.subject.exam === "BOTH";
-  }
-
-  return topic.subject.exam === examFilter || topic.subject.exam === "BOTH";
-};
-
-const difficultyOrder = ["EASY", "MEDIUM", "HARD"];
-const examOrder = ["JEE", "NEET", "BOTH"];
 
 export function PracticeDashboard() {
   const [examFilter, setExamFilter] = useState("ALL");
@@ -74,69 +51,56 @@ export function PracticeDashboard() {
   const questions = questionsData?.questions ?? [];
   const dailyQuestions = dailyData?.dailyQuestions ?? [];
 
-  const availableTopics = useMemo(() => {
-    return topics.filter((topic) => examTopicMatch(examFilter, topic));
-  }, [topics, examFilter]);
-
   const topicNames = useMemo(() => {
-    return Array.from(new Set(availableTopics.map((topic) => topic.name))).sort();
-  }, [availableTopics]);
+    return Array.from(new Set(topics.map((t) => t.name))).sort();
+  }, [topics]);
 
   const sortedQuestions = useMemo(() => {
     return [...questions].sort((a, b) => a.serialNumber - b.serialNumber);
   }, [questions]);
 
   const filteredQuestions = useMemo(() => {
-    return sortedQuestions.filter((question) => {
-      const matchExam = examFilter === "ALL" || question.exam === examFilter;
-      const matchDifficulty = difficultyFilter === "ALL" || question.difficulty === difficultyFilter;
-      const matchTopic = topicFilter === "ALL" || question.topic.name === topicFilter;
+    return sortedQuestions.filter((q) => {
+      const matchExam = examFilter === "ALL" || q.exam === examFilter;
+      const matchDifficulty = difficultyFilter === "ALL" || q.difficulty === difficultyFilter;
+      const matchTopic = topicFilter === "ALL" || q.topic.name === topicFilter;
       return matchExam && matchDifficulty && matchTopic;
     });
   }, [sortedQuestions, examFilter, difficultyFilter, topicFilter]);
 
-  const handleExamChange = (value: string) => {
-    setExamFilter(value);
-    setTopicFilter("ALL");
-  };
-
-  const handleTopicChange = (value: string) => {
-    setTopicFilter(value);
-  };
-
-  const handleDifficultyChange = (value: string) => {
-    setDifficultyFilter(value);
-  };
+  const handleExamChange = (value: string) => setExamFilter(value);
+  const handleDifficultyChange = (value: string) => setDifficultyFilter(value);
+  const handleTopicChange = (value: string) => setTopicFilter(value);
 
   if (topicsLoading || questionsLoading || dailyLoading) {
-    return <div className="practice-page">Loading practice dashboard...</div>;
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", color: "var(--lc-muted)" }}>
+        Loading...
+      </div>
+    );
   }
 
   return (
     <div className="practice-page">
       <PracticeHeader />
 
-      <PracticeFilters
-        examFilter={examFilter}
-        difficultyFilter={difficultyFilter}
-        topicFilter={topicFilter}
-        topicOptions={topicNames}
-        onExamChange={handleExamChange}
-        onDifficultyChange={handleDifficultyChange}
-        onTopicChange={handleTopicChange}
-      />
-
-      <main className="practice-grid">
-        <TopicList topics={availableTopics} selectedTopic={topicFilter} onSelectTopic={handleTopicChange} />
-
-        <section className="content-stack">
-          <DailyQuestions items={dailyQuestions} />
-          <QuestionTable
-            questions={filteredQuestions}
-            onSelectQuestion={(serial) => navigate(`/question/${serial}`)}
-          />
-        </section>
-      </main>
+      {/* Full-width single column — no sidebar */}
+      <div className="content-stack">
+        <PracticeFilters
+          examFilter={examFilter}
+          difficultyFilter={difficultyFilter}
+          topicFilter={topicFilter}
+          topicOptions={topicNames}
+          onExamChange={handleExamChange}
+          onDifficultyChange={handleDifficultyChange}
+          onTopicChange={handleTopicChange}
+        />
+        <DailyQuestions items={dailyQuestions} />
+        <QuestionTable
+          questions={filteredQuestions}
+          onSelectQuestion={(serial) => navigate(`/question/${serial}`)}
+        />
+      </div>
     </div>
   );
 }
